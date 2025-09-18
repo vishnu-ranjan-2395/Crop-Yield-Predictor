@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crop Prediction Helper</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --accent:#2b8aef;
+      --muted:#6b7280;
+      --radius:12px;
+    }
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #eef6ff 0%, var(--bg) 100%);
+      margin:0; padding:40px; color:#0f172a;
+    }
+    .container{max-width:920px;margin:0 auto}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 8px 30px rgba(15,23,42,0.06);padding:26px}
+    h1{margin:0 0 6px;font-size:22px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+
+    form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef8;background:#fff;font-size:14px}
+    .full{grid-column:1/-1}
+    .actions{display:flex;gap:12px;align-items:center}
+    button{background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    button.secondary{background:#eef2ff;color:var(--accent);border:1px solid rgba(43,138,239,0.12)}
+    .result{margin-top:18px;padding:16px;border-radius:10px;background:#f8fafc;border:1px dashed #e6eef8}
+    .muted-small{font-size:13px;color:var(--muted)}
+
+    @media (max-width:720px){form{grid-template-columns:1fr} .container{padding:0 18px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Crop Prediction Helper</h1>
+      <p class="lead">Predict success percentage of a crop based on inputs, along with precautions. Data is loaded from JSON.</p>
+
+      <form id="predict-form" onsubmit="return false;">
+        <div>
+          <label for="crop">Crop</label>
+          <select id="crop" required>
+            <option value="wheat">Wheat</option>
+            <option value="rice">Rice</option>
+            <option value="maize">Maize</option>
+            <option value="soybean">Soybean</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="season">Season</label>
+          <select id="season" required>
+            <option value="rabi">Rabi</option>
+            <option value="kharif">Kharif</option>
+            <option value="summer">Summer</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="soil">Soil type</label>
+          <select id="soil" required>
+            <option value="loamy">Loamy</option>
+            <option value="sandy">Sandy</option>
+            <option value="clay">Clay</option>
+          </select>
+        </div>
+
+        <div class="full actions">
+          <button id="predict-btn">Predict</button>
+          <button id="sample-btn" type="button" class="secondary">Load Example</button>
+          <div style="margin-left:auto" class="muted-small">Output: success % and precaution</div>
+        </div>
+      </form>
+
+      <div id="result" class="result" aria-live="polite">
+        <strong>Result:</strong>
+        <div id="result-value" style="margin-top:8px;font-size:18px">—</div>
+        <div id="precaution" class="muted-small" style="margin-top:8px"></div>
+      </div>
+
+      <hr style="margin:18px 0" />
+      <p class="muted-small">Notes: This demo shows percentage likelihood and basic precaution text. Data is read from dataset.json.</p>
+    </div>
+  </div>
+
+  <script>
+    let dataset = [];
+
+    // Load dataset.json on page load
+    fetch("dataset.json")
+      .then(res => res.json())
+      .then(data => {
+        dataset = data;
+        console.log("Dataset loaded:", dataset);
+      })
+      .catch(err => console.error("Error loading dataset:", err));
+
+    const btn = document.getElementById('predict-btn');
+    const sampleBtn = document.getElementById('sample-btn');
+    const resultValue = document.getElementById('result-value');
+    const precautionEl = document.getElementById('precaution');
+
+    function readInputs(){
+      return {
+        crop: document.getElementById('crop').value,
+        season: document.getElementById('season').value,
+        soil: document.getElementById('soil').value
+      };
+    }
+
+    function doPredict(){
+      const inputs = readInputs();
+      const match = dataset.find(row =>
+        row.Crop === inputs.crop &&
+        row.Season === inputs.season &&
+        row.Soil === inputs.soil
+      );
+
+      if(match){
+        resultValue.textContent = `Success likelihood: ${match.Percentage}%`;
+        precautionEl.textContent = `Precaution: ${match.Precaution}`;
+      } else {
+        resultValue.textContent = "No data found for this combination.";
+        precautionEl.textContent = "";
+      }
+    }
+
+    btn.addEventListener('click', doPredict);
+    sampleBtn.addEventListener('click', ()=>{
+      document.getElementById('crop').value = 'rice';
+      document.getElementById('season').value = 'kharif';
+      document.getElementById('soil').value = 'clay';
+      doPredict();
+    });
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,58 @@
+[
+  {
+    "Crop": "wheat",
+    "Season": "rabi",
+    "Soil": "loamy",
+    "Percentage": 82,
+    "Precaution": "Ensure timely irrigation during critical stages."
+  },
+  {
+    "Crop": "wheat",
+    "Season": "rabi",
+    "Soil": "clay",
+    "Percentage": 76,
+    "Precaution": "Avoid waterlogging and provide proper drainage."
+  },
+  {
+    "Crop": "rice",
+    "Season": "kharif",
+    "Soil": "loamy",
+    "Percentage": 88,
+    "Precaution": "Maintain proper water levels and control pests."
+  },
+  {
+    "Crop": "rice",
+    "Season": "kharif",
+    "Soil": "clay",
+    "Percentage": 85,
+    "Precaution": "Flood control and timely weeding are necessary."
+  },
+  {
+    "Crop": "maize",
+    "Season": "summer",
+    "Soil": "sandy",
+    "Percentage": 75,
+    "Precaution": "Provide adequate sunlight and nitrogen fertilizer."
+  },
+  {
+    "Crop": "maize",
+    "Season": "kharif",
+    "Soil": "loamy",
+    "Percentage": 80,
+    "Precaution": "Control weeds and ensure moderate irrigation."
+  },
+  {
+    "Crop": "soybean",
+    "Season": "kharif",
+    "Soil": "loamy",
+    "Percentage": 70,
+    "Precaution": "Protect from fungal diseases and ensure good drainage."
+  },
+  {
+    "Crop": "soybean",
+    "Season": "kharif",
+    "Soil": "clay",
+    "Percentage": 68,
+    "Precaution": "Avoid excessive moisture and monitor for pests."
+  }
+]
